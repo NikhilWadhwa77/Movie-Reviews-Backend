@@ -1,15 +1,5 @@
-#
-# Build stage
-#
-FROM maven:3.8.2-jdk-17 AS build
-COPY . .
-RUN mvn clean package -DskipTests
-
-#
-# Package stage
-#
-FROM openjdk:17-jdk-slim
-COPY --from=build /target/movies-0.0.1-SNAPSHOT.jar movies.jar
-# ENV PORT=8080
+FROM eclipse-temurin:17-jdk-alpine
+VOLUME /tmp
+COPY target/*.jar movies.jar
+ENTRYPOINT ["java","-jar","/movies.jar"]
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","demo.jar"]
